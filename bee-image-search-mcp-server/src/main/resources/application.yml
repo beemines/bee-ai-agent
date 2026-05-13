@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: bee-image-search-mcp-server
+  profiles:
+    active: sse,local
+server:
+  port: 8127
