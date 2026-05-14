@@ -12,7 +12,7 @@ public class PDFGenerationToolTest {
     public void testGeneratePDF() {
         PDFGenerationTool tool = new PDFGenerationTool();
         String fileName = "beemines.pdf";
-        String content = "测试fengxue2323";
+        String content = "测测试试fengxue2323";
         String result = tool.generatePDF(fileName, content);
         assertNotNull(result);
     }

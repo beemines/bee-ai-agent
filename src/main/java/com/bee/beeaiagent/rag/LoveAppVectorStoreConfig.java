@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
+import java.util.Objects;
 
 @Configuration
 public class LoveAppVectorStoreConfig {
@@ -30,8 +31,15 @@ public class LoveAppVectorStoreConfig {
         List<Document> documentList = loveAppDocumentLoader.loadMarkdowns();
         //自主切分文档
         //List<Document> splitDocuments = myTokenTextSplitter.splitCustomized(documents);
-        List<Document> enrichDocuments = myKeyWordEnricher.enrichDocuments(documentList);
-        simpleVectorStore.add(enrichDocuments);
+        List<Document> splitDocuments = myTokenTextSplitter.splitCustomized(documentList);
+        List<Document> validDocuments = splitDocuments.stream()
+                .filter(Objects::nonNull)
+                .filter(document -> document.getText() != null && !document.getText().isBlank())
+                .toList();
+        List<Document> enrichDocuments = myKeyWordEnricher.enrichDocuments(validDocuments);
+        if (!enrichDocuments.isEmpty()) {
+            simpleVectorStore.add(enrichDocuments);
+        }
         return simpleVectorStore;
     }
 
